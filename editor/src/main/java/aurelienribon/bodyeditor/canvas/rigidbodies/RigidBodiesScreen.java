@@ -330,7 +330,9 @@ public class RigidBodiesScreen {
                     public void run() {
                         AutoTraceParamsDialog dialog = new AutoTraceParamsDialog(Ctx.window);
                         dialog.setLocationRelativeTo(Ctx.window);
-                        if (dialog.prompt()) autoTrace();
+                        if (dialog.prompt()) {
+                            autoTrace();
+                        }
                     }
                 });
             }

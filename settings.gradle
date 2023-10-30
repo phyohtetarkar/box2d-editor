@@ -1,1 +1,2 @@
-include 'editor', 'loader-libgdx', 'loader-libgdx-demo'
+//include 'editor', 'loader-libgdx', 'loader-libgdx-demo'
+include 'editor'

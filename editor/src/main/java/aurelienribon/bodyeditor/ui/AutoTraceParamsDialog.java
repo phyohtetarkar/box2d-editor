@@ -29,6 +29,8 @@ public class AutoTraceParamsDialog extends javax.swing.JDialog {
     public AutoTraceParamsDialog(javax.swing.JFrame parent) {
         super(parent, true);
 
+        setResizable(true);
+
         setContentPane(new PaintedPanel());
         initComponents();
 
@@ -89,7 +91,7 @@ public class AutoTraceParamsDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Auto-trace parameters");
-        setResizable(false);
+        setResizable(true);
 
         hullToleranceSlider.setMajorTickSpacing(100);
         hullToleranceSlider.setMaximum(400);

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * @author Aurelien Ribon | http://www.aurelienribon.com/
  */
@@ -31,10 +33,25 @@ public class TextureUtils {
         potPixmap.drawPixmap(pixmap, 0, 0, 0, 0, origW, origH);
         pixmap.dispose();
 
-        Texture texture = new Texture(potPixmap);
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        AtomicReference<Texture> texture = new AtomicReference<>();
+        Gdx.app.postRunnable(() -> {
+            texture.set(new Texture(potPixmap));
+            texture.get().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        });
 
-        return new TextureRegion(texture, 0, 0, origW, origH);
+        while (texture.get() == null) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+//        Texture texture = new Texture(potPixmap);
+//        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+//        return new TextureRegion(texture, 0, 0, origW, origH);
+        return new TextureRegion(texture.get(), 0, 0, origW, origH);
     }
 
     public static Pixmap getPOTPixmap(String path) {
