@@ -1,60 +1,85 @@
-apply plugin: "java"
+apply plugin: "java-library"
 
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 project.ext.mainClassName = "aurelienribon.bodyeditor.ui.Main"
+
+import org.gradle.internal.os.OperatingSystem
+
 dependencies {
-    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-    compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    //implementation "com.badlogicgames.gdx:gdx-lwjgl3-glfw-awt-macos:$gdxVersion"
 
-    compile "net.java.balloontip:balloontip:1.2.1"
-    compile "commons-io:commons-io:2.1"
-    compile "org.json:json:20090211"
+    implementation "net.java.balloontip:balloontip:1.2.1"
+    implementation "commons-io:commons-io:2.1"
+    implementation "org.json:json:20230227"
 
-    compile files('./libs/css-engine-swing-api.jar')
-    compile files('./libs/tween-engine-api.jar')
-
+    implementation files('./libs/css-engine-swing-api.jar')
+    implementation files('./libs/tween-engine-api.jar')
+    implementation files('./libs/lwjgl-platform-natives-osx.jar')
 }
 
 sourceSets {
     main {
-        java
-                {
-                    srcDirs = ["src/main/java"]
-                    output.classesDir 'build/classes'
-                }
+        java {
+            srcDirs = ["src/main/java"]
+            //output.classesDirs 'build/classes'
+        }
         resources.srcDirs = ["src/main/resources"]
         output.resourcesDir 'build/classes'
     }
 }
 
-jar {
-    archiveName = "PhysicsBodyEditor.jar"
-
-//    doFirst {
-//        copy {
-//            from 'src/SolAppListener.gwt.xml'
-//            into 'build/classes/main'
-//        }
+//jar {
+//    archiveName = "PhysicsBodyEditor.jar"
+//    manifest {
+//        attributes(
+//                'Main-Class': project.mainClassName
+//        )
 //    }
-}
+//
+////    doFirst {
+////        copy {
+////            from 'src/SolAppListener.gwt.xml'
+////            into 'build/classes/main'
+////        }
+////    }
+//}
 
 eclipse.project {
     name = appName + "-editor"
 }
 
-task run(type: JavaExec) {
+tasks.register('run', JavaExec) {
     dependsOn classes
-
-    main = project.mainClassName
+    mainClass = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = project(':editor').projectDir
-    ignoreExitValue = true
+    ignoreExitValue(true)
+
+    if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
+        // Required to run on macOS
+        jvmArgs += "-XstartOnFirstThread"
+    }
+}
+
+tasks.register('dist', Jar) {
+    archiveFileName.set("PhysicsBodyEditor-mac-arm64.jar")
+    dependsOn classes
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
 }
 
 idea {

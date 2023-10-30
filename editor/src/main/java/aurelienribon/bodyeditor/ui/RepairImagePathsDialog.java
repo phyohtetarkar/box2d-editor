@@ -98,7 +98,7 @@ public class RepairImagePathsDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Repair image paths");
-        setResizable(false);
+        setResizable(true);
 
         jLabel1.setText("Images common path: ");
 

@@ -211,7 +211,7 @@ public class RigidBodiesCreationDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New rigid body");
-        setResizable(false);
+        setResizable(true);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gfx/newBody.png"))); // NOI18N
         getContentPane().add(jLabel4, java.awt.BorderLayout.WEST);

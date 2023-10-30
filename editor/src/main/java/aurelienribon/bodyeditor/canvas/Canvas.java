@@ -81,6 +81,7 @@ public class Canvas extends ApplicationAdapter {
     // -------------------------------------------------------------------------
 
     private void initializeSelectionListeners() {
+
         Ctx.bodies.addChangeListener(new ChangeListener() {
             @Override
             public void propertyChanged(Object source, String propertyName) {
@@ -117,8 +118,8 @@ public class Canvas extends ApplicationAdapter {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
-        Gdx.gl30.glClearColor(1, 1, 1, 1);
-        Gdx.gl30.glClear(Gdx.gl30.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(screenCamera.combined);
         batch.begin();
@@ -143,8 +144,13 @@ public class Canvas extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
-        Gdx.gl30.glViewport(0, 0, width, height);
+        //Gdx.gl.glViewport(0, 0, width, height);
         resetCameras();
+    }
+
+    @Override
+    public void dispose() {
+        Ctx.window.dispose();
     }
 
     // -------------------------------------------------------------------------
@@ -195,7 +201,7 @@ public class Canvas extends ApplicationAdapter {
 
         worldCamera.viewportWidth = w / 400;
         worldCamera.viewportHeight = w / 400 * h / w;
-        worldCamera.position.set(0.5f, 0.5f, 0);
+        worldCamera.position.set(0.5f,  0.5f, 0);
         worldCamera.update();
 
         screenCamera.viewportWidth = w;

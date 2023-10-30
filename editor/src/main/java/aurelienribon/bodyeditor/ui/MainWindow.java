@@ -12,13 +12,7 @@ import aurelienribon.utils.ui.SwingHelper;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -64,15 +58,27 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowOpened(WindowEvent e) {
                 Ctx.bodies.select(null);
                 Ctx.objects.select(null);
             }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+                //pack();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                System.exit(0);
+            }
         });
 
-        checkUpdates();
+        //checkUpdates();
     }
 
     public void setCanvas(Component canvas) {
@@ -165,7 +171,6 @@ public class MainWindow extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         sidePanel = new javax.swing.JPanel();
         logoPanel = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
@@ -276,6 +281,8 @@ public class MainWindow extends javax.swing.JFrame {
         );
 
         pack();
+
+
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -293,4 +300,9 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel versionLabel;
     private javax.swing.JPanel versionPanel;
     // End of variables declaration//GEN-END:variables
+
+
+    public JPanel getRenderPanel() {
+        return renderPanel;
+    }
 }
